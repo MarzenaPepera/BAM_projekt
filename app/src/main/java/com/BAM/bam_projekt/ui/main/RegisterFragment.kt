@@ -38,6 +38,7 @@ class RegisterFragment : Fragment() {
 
             Log.d("RegisterFragment", "Username: $username, Password: $password")
 
+
             viewModel.registerUser(username, password)
         }
     }
