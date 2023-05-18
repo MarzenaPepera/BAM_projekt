@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "807887427514",
+    "project_id": "bamprojekt",
+    "storage_bucket": "bamprojekt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807887427514:android:8de8a53e394fa741796f83",
+        "android_client_info": {
+          "package_name": "com.BAM.bam_projekt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807887427514-t4hc23fsndmmcvl3k56tfo676pl3qv86.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbWLL8XeLZGu6P4n0am6Zv35UGaI2eO_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807887427514-t4hc23fsndmmcvl3k56tfo676pl3qv86.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
