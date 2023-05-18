@@ -11,14 +11,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        // This is the code that is executed when the app is started
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.container, MainFragment.newInstance())
-//                .commitNow()
-//        }
-
         // Tutaj możemy zainicjalizować nasz pierwszy fragment, np. RegisterFragment
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, RegisterFragment())
