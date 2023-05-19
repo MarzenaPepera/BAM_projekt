@@ -5,10 +5,10 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/input_username"
+        android:id="@+id/input_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Login"
+        android:hint="Email"
         android:inputType="text"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:hint="Hasło"
         android:inputType="textPassword"
-        android:layout_below="@id/input_username"
+        android:layout_below="@id/input_email"
         android:layout_centerHorizontal="true"/>
 
     <Button

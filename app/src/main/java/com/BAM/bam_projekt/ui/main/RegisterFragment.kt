@@ -1,6 +1,5 @@
 package com.BAM.bam_projekt.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.BAM.bam_projekt.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -36,17 +36,17 @@ class RegisterFragment : Fragment() {
 
         // Przykładowe zdarzenie kliknięcia przycisku rejestracji
         val registerButton = view.findViewById<Button>(R.id.button_register)
-        val usernameInput = view.findViewById<EditText>(R.id.input_username)
+        val emailInput = view.findViewById<EditText>(R.id.input_email)
         val passwordInput = view.findViewById<EditText>(R.id.input_password)
 
         registerButton.setOnClickListener {
-            val username = usernameInput.text.toString()
+            val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
 
-            Log.d("RegisterFragment", "Username: $username, Password: $password")
+            Log.d("RegisterFragment", "Email: $email, Password: $password")
 
             //viewModel.registerUser(username, password)
-            registerNewUser(username, password)
+            registerNewUser(email, password)
 
         }
     }
@@ -57,7 +57,8 @@ class RegisterFragment : Fragment() {
                     // Rejestracja udana, aktualizuj interfejs użytkownika z danymi użytkownika
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
-                    // Możesz teraz przekierować użytkownika do innego fragmentu lub aktywności
+                    val navController = findNavController()
+                    navController.navigate(R.id.action_registerFragment_to_loginFragment)
                 } else {
                     // Jeśli rejestracja nie powiedzie się, wyświetl komunikat dla użytkownika.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
