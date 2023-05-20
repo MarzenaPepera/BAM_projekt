@@ -40,13 +40,15 @@ class RegisterFragment : Fragment() {
         val passwordInput = view.findViewById<EditText>(R.id.input_password)
 
         registerButton.setOnClickListener {
-            val email = emailInput.text.toString()
+            navToLogin()
+/*            val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
+
 
             Log.d("RegisterFragment", "Email: $email, Password: $password")
 
             //viewModel.registerUser(username, password)
-            registerNewUser(email, password)
+            registerNewUser(email, password)*/
 
         }
     }
@@ -57,8 +59,7 @@ class RegisterFragment : Fragment() {
                     // Rejestracja udana, aktualizuj interfejs użytkownika z danymi użytkownika
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
-                    val navController = findNavController()
-                    navController.navigate(R.id.action_registerFragment_to_loginFragment)
+                    navToLogin()
                 } else {
                     // Jeśli rejestracja nie powiedzie się, wyświetl komunikat dla użytkownika.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -66,6 +67,11 @@ class RegisterFragment : Fragment() {
                         Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun navToLogin() {
+        val navController = findNavController()
+        navController.navigate(R.id.action_registerFragment_to_loginFragment)
     }
 
     companion object {
