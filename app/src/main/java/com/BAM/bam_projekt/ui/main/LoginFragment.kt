@@ -33,6 +33,7 @@ class LoginFragment : Fragment() {
         val loginButton = view.findViewById<Button>(R.id.button_login)
         val editTextEmail = view.findViewById<EditText>(R.id.editTextEmail)
         val editTextPassword = view.findViewById<EditText>(R.id.editTextPassword)
+        val button_to_register = view.findViewById<Button>(R.id.button_to_register)
 
         editTextEmail.text=null
         editTextPassword.text=null
@@ -55,5 +56,13 @@ class LoginFragment : Fragment() {
                 Snackbar.make(requireView(), "Please fill in all the fields.", Snackbar.LENGTH_SHORT).show()
             }
         }
+
+        button_to_register.setOnClickListener {
+            navToRegister()
+        }
+    }
+    private fun navToRegister() {
+        val navController = findNavController()
+        navController.navigate(R.id.action_loginFragment_to_registerFragment)
     }
 }

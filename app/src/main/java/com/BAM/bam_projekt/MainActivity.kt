@@ -10,10 +10,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Tutaj możemy zainicjalizować nasz pierwszy fragment, np. RegisterFragment
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, RegisterFragment())
-            .commit()
     }
 }
