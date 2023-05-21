@@ -35,9 +35,6 @@ class LoginFragment : Fragment() {
         val editTextPassword = view.findViewById<EditText>(R.id.editTextPassword)
         val button_to_register = view.findViewById<Button>(R.id.button_to_register)
 
-        editTextEmail.text=null
-        editTextPassword.text=null
-
         loginButton.setOnClickListener {
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
