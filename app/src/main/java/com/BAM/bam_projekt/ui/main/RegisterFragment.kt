@@ -38,18 +38,21 @@ class RegisterFragment : Fragment() {
         val registerButton = view.findViewById<Button>(R.id.button_register)
         val emailInput = view.findViewById<EditText>(R.id.input_email)
         val passwordInput = view.findViewById<EditText>(R.id.input_password)
+        val button_to_login = view.findViewById<Button>(R.id.button_to_login)
 
         registerButton.setOnClickListener {
-            navToLogin()
-/*            val email = emailInput.text.toString()
-            val password = passwordInput.text.toString()
 
+            val email = emailInput.text.toString()
+            val password = passwordInput.text.toString()
 
             Log.d("RegisterFragment", "Email: $email, Password: $password")
 
             //viewModel.registerUser(username, password)
-            registerNewUser(email, password)*/
+            registerNewUser(email, password)
+        }
 
+        button_to_login.setOnClickListener {
+            navToLogin()
         }
     }
     private fun registerNewUser(email: String, password: String) {

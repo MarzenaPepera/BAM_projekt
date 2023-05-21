@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -8,26 +10,43 @@
         android:id="@+id/input_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:hint="Email"
         android:inputType="text"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/input_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/input_email"
         android:hint="Hasło"
         android:inputType="textPassword"
-        android:layout_below="@id/input_email"
-        android:layout_centerHorizontal="true"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_email" />
 
     <Button
         android:id="@+id/button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Zarejestruj"
         android:layout_below="@id/input_password"
-        android:layout_centerHorizontal="true"/>
+        android:text="Zarejestruj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_password" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/button_to_login"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_password"
+        android:backgroundTint="@color/grey"
+        android:text="Logowanie"
+        android:textColor="@color/purple_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
