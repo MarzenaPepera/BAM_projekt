@@ -45,9 +45,9 @@ class LoginFragment : Fragment() {
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        // TODO findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
-                        Toast.makeText(context, "Logowanie powiodło się.",
-                            Toast.LENGTH_SHORT).show()
+                        navToHome()
+//                        Toast.makeText(context, "Logowanie powiodło się.",
+//                            Toast.LENGTH_SHORT).show()
                     } else {
                         Snackbar.make(requireView(), "Authentication failed.", Snackbar.LENGTH_SHORT).show()
                     }
@@ -64,5 +64,9 @@ class LoginFragment : Fragment() {
     private fun navToRegister() {
         val navController = findNavController()
         navController.navigate(R.id.action_loginFragment_to_registerFragment)
+    }
+    private fun navToHome() {
+        val navController = findNavController()
+        navController.navigate(R.id.action_loginFragment_to_homeFragment)
     }
 }
