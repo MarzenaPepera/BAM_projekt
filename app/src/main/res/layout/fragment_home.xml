@@ -53,10 +53,30 @@ android:padding="16dp">
         android:id="@+id/readButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="Odczytaj"
         app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Edytuj"
+        app:layout_constraintStart_toEndOf="@+id/readButton"
+        app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Usuń"
+        app:layout_constraintStart_toEndOf="@+id/editButton"
         app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

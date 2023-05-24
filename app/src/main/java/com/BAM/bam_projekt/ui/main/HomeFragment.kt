@@ -22,6 +22,13 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var creditCardManager: CreditCardManager
+    lateinit var cardNumber: EditText
+    lateinit var cardExpiryDate: EditText
+    lateinit var cardCvv: EditText
+    lateinit var addButton: Button
+    lateinit var readButton: Button
+    lateinit var editButton: Button
+    lateinit var deleteButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,39 +42,26 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initCreditCardManager()
 
-        val cardNumber = view.findViewById<EditText>(R.id.cardNumber)
-        val cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
-        val cardCvv = view.findViewById<EditText>(R.id.cardCvv)
-        val addButton = view.findViewById<Button>(R.id.addButton)
-        val readButton = view.findViewById<Button>(R.id.readButton)
+        cardNumber = view.findViewById<EditText>(R.id.cardNumber)
+        cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
+        cardCvv = view.findViewById<EditText>(R.id.cardCvv)
+        addButton = view.findViewById<Button>(R.id.addButton)
+        readButton = view.findViewById<Button>(R.id.readButton)
+        editButton = view.findViewById<Button>(R.id.editButton)
+        deleteButton = view.findViewById<Button>(R.id.deleteButton)
 
 
-        addButton.setOnClickListener {
-            val number = cardNumber.text.toString()
-            val expiryDate = cardExpiryDate.text.toString()
-            val cvv = cardCvv.text.toString()
-
-            if (number.isNotEmpty() && expiryDate.isNotEmpty() && cvv.isNotEmpty()) {
-                addCard(number, expiryDate, cvv)
-                Toast.makeText(
-                    context, "Dodanie karty powiodło się.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else
-                Snackbar.make(
-                    requireView(),
-                    "Please fill in all the fields.",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-        }
-
-        readButton.setOnClickListener { onReadButtonClick() }
+        addButton.setOnClickListener {addCard() }
+        readButton.setOnClickListener { showCard() }
+        editButton.setOnClickListener { editCard() }
+        deleteButton.setOnClickListener { deleteCard() }
 
     }
 
-    private fun onReadButtonClick() {
-        Toast.makeText(requireContext(),"Card: ${creditCardManager.getCard()}",Toast.LENGTH_LONG).show()
-    }
+//    private fun onReadButtonClick() {
+//        Toast.makeText(requireContext(), "Card: ${creditCardManager.getCard()}", Toast.LENGTH_LONG)
+//            .show()
+//    }
 
     private fun initCreditCardManager() {
 
@@ -87,7 +81,22 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun addCard(number: String, expiryDate: String, cvv: String) {
+    fun addCard() {
+        val number = cardNumber.text.toString()
+        val expiryDate = cardExpiryDate.text.toString()
+        val cvv = cardCvv.text.toString()
+
+        if (number.isNotEmpty() && expiryDate.isNotEmpty() && cvv.isNotEmpty()) {
+            Toast.makeText(
+                context, "Dodanie karty powiodło się.",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else
+            Snackbar.make(
+                requireView(),
+                "Please fill in all the fields.",
+                Snackbar.LENGTH_SHORT
+            ).show()
         val card = CreditCard(
             number = number,
             expiryDate = expiryDate,
@@ -95,4 +104,26 @@ class HomeFragment : Fragment() {
         )
         creditCardManager.saveCard(card)
     }
+
+    fun showCard() {
+        val card = creditCardManager.getCard()
+        cardNumber.setText(card?.number)
+        cardExpiryDate.setText(card?.expiryDate)
+        cardCvv.setText(card?.cvv)
+    }
+
+    fun editCard() {
+        addCard()
+        showCard()
+    }
+
+    fun deleteCard() {
+        creditCardManager.deleteCard()
+        cardNumber.setText(null)
+        cardExpiryDate.setText(null)
+        cardCvv.setText(null)
+        if(creditCardManager.equals(null))
+            Toast.makeText(requireContext(), "Karta usunięta", Toast.LENGTH_LONG).show()
+    }
+
 }
