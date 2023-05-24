@@ -15,4 +15,12 @@ data class CreditCard(
     fun encrypt(cipher: Cipher): ByteArray {
         return cipher.doFinal(toCsv().toByteArray())
     }
+
+    companion object {
+        fun fromCsv(data: ByteArray, cipher: Cipher): CreditCard {
+            val decryptedData = String(cipher.doFinal(data))
+            val parts = decryptedData.split(",")
+            return CreditCard(parts[0], parts[1], parts[2])
+        }
+    }
 }

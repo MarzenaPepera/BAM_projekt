@@ -14,6 +14,7 @@ import com.BAM.bam_projekt.R
 import com.BAM.bam_projekt.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
+import java.io.FileNotFoundException
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
@@ -149,9 +150,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun importCard() {
-        //TODO: import card
-        Toast.makeText(requireContext(), "Będziemy importować", Toast.LENGTH_LONG).show()
+        val secretKey = "mySuperSecretKey" // This should be a securely generated key
+        val keySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+        val cipher = Cipher.getInstance("AES")
+        cipher.init(Cipher.DECRYPT_MODE, keySpec)
 
+        try{
+            val filePath = requireContext().filesDir.absolutePath + "/exportedData.csv"
+            val encryptedData = File(filePath).readBytes()
+            val card = CreditCard.fromCsv(encryptedData, cipher)
+
+            creditCardManager.saveCard(card)
+            Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku exportedData.csv", Toast.LENGTH_LONG).show()
+        } catch (e: FileNotFoundException) {
+            Toast.makeText(context, "Brak pliku exportedData.csv", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(context, "Wystąpił błąd podczas importu", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
