@@ -13,6 +13,9 @@ import androidx.security.crypto.MasterKey
 import com.BAM.bam_projekt.R
 import com.BAM.bam_projekt.MainActivity
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 class HomeFragment : Fragment() {
 
@@ -63,11 +66,6 @@ class HomeFragment : Fragment() {
         importButton.setOnClickListener { importCard() }
 
     }
-
-//    private fun onReadButtonClick() {
-//        Toast.makeText(requireContext(), "Card: ${creditCardManager.getCard()}", Toast.LENGTH_LONG)
-//            .show()
-//    }
 
     private fun initCreditCardManager() {
 
@@ -133,7 +131,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun exportCard() {
-        Toast.makeText(requireContext(), "Będziemy eksportować", Toast.LENGTH_LONG).show()
+        val card = creditCardManager.getCard()
+
+        card?.let {
+            val secretKey = "mySuperSecretKey" // This should be a securely generated key
+            val keySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+            val cipher = Cipher.getInstance("AES")
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec)
+
+            val encryptedData = cipher.doFinal(it.toCsv().toByteArray())
+//            val encryptedData = it.toCsv().toByteArray()
+            val filePath = requireContext().filesDir.absolutePath + "/exportedData.csv"
+            File(filePath).writeBytes(encryptedData)
+            Toast.makeText(requireContext(), "Dane zostały wyeksportowane do pliku exportedData.csv", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun importCard() {
