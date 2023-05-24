@@ -2,7 +2,7 @@ package com.BAM.bam_projekt.ui.main
 
 import android.content.SharedPreferences
 
-class CreditCardManager(private val sharedPreferences: SharedPreferences) {
+class DataManager(private val sharedPreferences: SharedPreferences) {
 
     fun saveCard(card: CreditCard) {
         with(sharedPreferences.edit()) {
@@ -32,5 +32,19 @@ class CreditCardManager(private val sharedPreferences: SharedPreferences) {
             remove("card_cvv")
             commit()
         }
+    }
+
+    fun saveUserCredentials(username: String, password: String) {
+        with(sharedPreferences.edit()) {
+            putString("username", username)
+            putString("password", password)
+            commit()
+        }
+    }
+
+    fun getUserCredentials(): Pair<String?, String?> {
+        val username = sharedPreferences.getString("username", null)
+        val password = sharedPreferences.getString("password", null)
+        return Pair(username, password)
     }
 }

@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.BAM.bam_projekt.R
-import com.BAM.bam_projekt.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileNotFoundException
@@ -25,7 +24,8 @@ class HomeFragment : Fragment() {
     }
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var creditCardManager: CreditCardManager
+    private lateinit var dataManager: DataManager
+
     lateinit var cardNumber: EditText
     lateinit var cardExpiryDate: EditText
     lateinit var cardCvv: EditText
@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCreditCardManager()
+        initDataManager()
 
         cardNumber = view.findViewById<EditText>(R.id.cardNumber)
         cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun initCreditCardManager() {
+    private fun initDataManager() {
 
         val masterKey = MasterKey.Builder(requireContext())
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
 
-        creditCardManager = CreditCardManager(sharedPreferences)
+        dataManager = DataManager(sharedPreferences)
 
     }
 
@@ -107,11 +107,11 @@ class HomeFragment : Fragment() {
             expiryDate = expiryDate,
             cvv = cvv
         )
-        creditCardManager.saveCard(card)
+        dataManager.saveCard(card)
     }
 
     fun showCard() {
-        val card = creditCardManager.getCard()
+        val card = dataManager.getCard()
         cardNumber.setText(card?.number)
         cardExpiryDate.setText(card?.expiryDate)
         cardCvv.setText(card?.cvv)
@@ -123,16 +123,16 @@ class HomeFragment : Fragment() {
     }
 
     fun deleteCard() {
-        creditCardManager.deleteCard()
+        dataManager.deleteCard()
         cardNumber.setText(null)
         cardExpiryDate.setText(null)
         cardCvv.setText(null)
-        if(creditCardManager.equals(null))
+        if(dataManager.equals(null))
             Toast.makeText(requireContext(), "Karta usunięta", Toast.LENGTH_LONG).show()
     }
 
     private fun exportCard() {
-        val card = creditCardManager.getCard()
+        val card = dataManager.getCard()
 
         card?.let {
             val secretKey = "mySuperSecretKey" // This should be a securely generated key
@@ -160,7 +160,7 @@ class HomeFragment : Fragment() {
             val encryptedData = File(filePath).readBytes()
             val card = CreditCard.fromCsv(encryptedData, cipher)
 
-            creditCardManager.saveCard(card)
+            dataManager.saveCard(card)
             Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku exportedData.csv", Toast.LENGTH_LONG).show()
         } catch (e: FileNotFoundException) {
             Toast.makeText(context, "Brak pliku exportedData.csv", Toast.LENGTH_SHORT).show()
