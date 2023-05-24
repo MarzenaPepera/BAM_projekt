@@ -144,7 +144,8 @@ class HomeFragment : Fragment() {
             val filePath = requireContext().filesDir.absolutePath + "/exportedData.csv"
             File(filePath).writeBytes(encryptedData)
             Toast.makeText(requireContext(), "Dane zostały wyeksportowane do pliku exportedData.csv", Toast.LENGTH_LONG).show()
-        }
+        } ?:
+            Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
     }
 
     private fun importCard() {
