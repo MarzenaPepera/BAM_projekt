@@ -79,4 +79,24 @@ android:padding="16dp">
         app:layout_constraintStart_toEndOf="@+id/editButton"
         app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
 
+    <Button
+        android:id="@+id/exportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Exportuj"
+        app:layout_constraintStart_toStartOf="@+id/addButton"
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
+
+    <Button
+        android:id="@+id/importButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Importuj"
+        app:layout_constraintStart_toEndOf="@+id/exportButton"
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

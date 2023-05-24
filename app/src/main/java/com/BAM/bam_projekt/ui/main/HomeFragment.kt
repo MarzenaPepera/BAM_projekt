@@ -29,6 +29,8 @@ class HomeFragment : Fragment() {
     lateinit var readButton: Button
     lateinit var editButton: Button
     lateinit var deleteButton: Button
+    lateinit var exportButton: Button
+    lateinit var importButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +51,16 @@ class HomeFragment : Fragment() {
         readButton = view.findViewById<Button>(R.id.readButton)
         editButton = view.findViewById<Button>(R.id.editButton)
         deleteButton = view.findViewById<Button>(R.id.deleteButton)
+        exportButton = view.findViewById<Button>(R.id.exportButton)
+        importButton = view.findViewById<Button>(R.id.importButton)
 
 
         addButton.setOnClickListener {addCard() }
         readButton.setOnClickListener { showCard() }
         editButton.setOnClickListener { editCard() }
         deleteButton.setOnClickListener { deleteCard() }
+        exportButton.setOnClickListener { exportCard() }
+        importButton.setOnClickListener { importCard() }
 
     }
 
@@ -124,6 +130,16 @@ class HomeFragment : Fragment() {
         cardCvv.setText(null)
         if(creditCardManager.equals(null))
             Toast.makeText(requireContext(), "Karta usunięta", Toast.LENGTH_LONG).show()
+    }
+
+    private fun exportCard() {
+        Toast.makeText(requireContext(), "Będziemy eksportować", Toast.LENGTH_LONG).show()
+    }
+
+    private fun importCard() {
+        //TODO: import card
+        Toast.makeText(requireContext(), "Będziemy importować", Toast.LENGTH_LONG).show()
+
     }
 
 }
