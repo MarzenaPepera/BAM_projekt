@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BAM_projekt"
         tools:targetApi="31">
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@navigation/nav_graph" />
@@ -20,10 +21,17 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".CardInfoProvider"
+            android:authorities="com.BAM.bam_projekt"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:readPermission="com.BAM.bam_projekt.READ_CARD_INFO"/>
+
     </application>
 
 </manifest>
