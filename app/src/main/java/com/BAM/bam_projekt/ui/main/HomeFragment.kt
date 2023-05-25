@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
@@ -29,6 +30,7 @@ class HomeFragment : Fragment() {
     lateinit var cardNumber: EditText
     lateinit var cardExpiryDate: EditText
     lateinit var cardCvv: EditText
+    lateinit var cardInfo: TextView
     lateinit var addButton: Button
     lateinit var readButton: Button
     lateinit var editButton: Button
@@ -51,6 +53,7 @@ class HomeFragment : Fragment() {
         cardNumber = view.findViewById<EditText>(R.id.cardNumber)
         cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
         cardCvv = view.findViewById<EditText>(R.id.cardCvv)
+        cardInfo = view.findViewById<TextView>(R.id.cardInfo)
         addButton = view.findViewById<Button>(R.id.addButton)
         readButton = view.findViewById<Button>(R.id.readButton)
         editButton = view.findViewById<Button>(R.id.editButton)
@@ -112,9 +115,10 @@ class HomeFragment : Fragment() {
 
     fun showCard() {
         val card = dataManager.getCard()
-        cardNumber.setText(card?.number)
-        cardExpiryDate.setText(card?.expiryDate)
-        cardCvv.setText(card?.cvv)
+        cardInfo.text = "Dane karty:\n" + card?.toString() ?: "Brak zapisanych kart"
+//        cardNumber.setText(card?.number)
+//        cardExpiryDate.setText(card?.expiryDate)
+//        cardCvv.setText(card?.cvv)
     }
 
     fun editCard() {
