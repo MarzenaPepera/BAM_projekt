@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.BAM.bam_projekt.R
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -76,13 +76,11 @@ class LoginFragment : Fragment() {
                     dataManager.saveUserCredentials(email, password)
                     navToHome()
                 } else {
-                    Snackbar.make(requireView(), "Authentication failed.", Snackbar.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context, "Brak autentykacji",Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
-            Snackbar.make(requireView(), "Please fill in all the fields.", Snackbar.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, "Proszę uzupełnić wszystkie pola",Toast.LENGTH_SHORT).show()
         }
     }
 

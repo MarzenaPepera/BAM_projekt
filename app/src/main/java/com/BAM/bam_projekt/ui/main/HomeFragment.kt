@@ -1,5 +1,6 @@
 package com.BAM.bam_projekt.ui.main
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,12 +10,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.BAM.bam_projekt.R
-import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileNotFoundException
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
@@ -30,6 +33,7 @@ class HomeFragment : Fragment() {
     lateinit var cardNumber: EditText
     lateinit var cardExpiryDate: EditText
     lateinit var cardCvv: EditText
+    lateinit var exportFilename: EditText
     lateinit var cardInfo: TextView
     lateinit var addButton: Button
     lateinit var readButton: Button
@@ -53,6 +57,7 @@ class HomeFragment : Fragment() {
         cardNumber = view.findViewById<EditText>(R.id.cardNumber)
         cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
         cardCvv = view.findViewById<EditText>(R.id.cardCvv)
+        exportFilename = view.findViewById<EditText>(R.id.exportFilename)
         cardInfo = view.findViewById<TextView>(R.id.cardInfo)
         addButton = view.findViewById<Button>(R.id.addButton)
         readButton = view.findViewById<Button>(R.id.readButton)
@@ -89,22 +94,26 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun addCard() {
-        val number = cardNumber.text.toString()
-        val expiryDate = cardExpiryDate.text.toString()
-        val cvv = cardCvv.text.toString()
+    fun validateCardNumber(cardNumber: String): Boolean {
+        return cardNumber.matches(Regex("^[0-9]{16}$"))
+    }
 
-        if (number.isNotEmpty() && expiryDate.isNotEmpty() && cvv.isNotEmpty()) {
-            Toast.makeText(
-                context, "Dodanie karty powiodło się.",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else
-            Snackbar.make(
-                requireView(),
-                "Please fill in all the fields.",
-                Snackbar.LENGTH_SHORT
-            ).show()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun validateExpiryDate(expiryDate: String): Boolean {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("MM/yy")
+            val date = formatter.parse(expiryDate)
+            date != null
+        } catch (e: DateTimeParseException) {
+            false
+        }
+    }
+
+    fun validateCVV(cvv: String): Boolean {
+        return cvv.matches(Regex("^[0-9]{3}$"))
+    }
+
+    fun saveCard(number: String, expiryDate: String, cvv: String){
         val card = CreditCard(
             number = number,
             expiryDate = expiryDate,
@@ -113,14 +122,43 @@ class HomeFragment : Fragment() {
         dataManager.saveCard(card)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun addCard() {
+        val number = cardNumber.text.toString()
+        val expiryDate = cardExpiryDate.text.toString()
+        val cvv = cardCvv.text.toString()
+
+        if (number.isNotEmpty() && expiryDate.isNotEmpty() && cvv.isNotEmpty()) {
+            if (validateCardNumber(number) && validateExpiryDate(expiryDate) && validateCVV(cvv)) {
+                saveCard(number, expiryDate, cvv)
+                showCard()
+                Toast.makeText(context, "Dodanie karty powiodło się.", Toast.LENGTH_SHORT).show()
+            } else
+                Toast.makeText(context, "Niepoprawne dane karty", Toast.LENGTH_SHORT).show()
+        } else
+            Toast.makeText(context, "Proszę uzupełnić wszystkie pola", Toast.LENGTH_SHORT).show()
+    }
+
     fun showCard() {
         val card = dataManager.getCard()
-        cardInfo.text = "Dane karty:\n" + card?.toString() ?: "Brak zapisanych kart"
+        if(card == null)
+            Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
+        else
+            cardInfo.text = "Dane karty:\n" + card?.toString()
 //        cardNumber.setText(card?.number)
 //        cardExpiryDate.setText(card?.expiryDate)
 //        cardCvv.setText(card?.cvv)
     }
 
+    fun revealCard() {
+        val card = dataManager.getCard()
+        if (card == null)
+            Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
+        else
+            cardInfo.text = "Dane karty:\n" + card?.reveal()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun editCard() {
         addCard()
         showCard()
@@ -131,6 +169,7 @@ class HomeFragment : Fragment() {
         cardNumber.setText(null)
         cardExpiryDate.setText(null)
         cardCvv.setText(null)
+        cardInfo.text = ""
         if(dataManager.equals(null))
             Toast.makeText(requireContext(), "Karta usunięta", Toast.LENGTH_LONG).show()
     }
@@ -146,9 +185,11 @@ class HomeFragment : Fragment() {
 
             val encryptedData = cipher.doFinal(it.toCsv().toByteArray())
 //            val encryptedData = it.toCsv().toByteArray()
-            val filePath = requireContext().filesDir.absolutePath + "/exportedData.csv"
+            if(exportFilename.text.toString().isEmpty())
+                exportFilename.setText("exportedData")
+            val filePath = requireContext().filesDir.absolutePath + "/" + exportFilename.text.toString() + ".csv"
             File(filePath).writeBytes(encryptedData)
-            Toast.makeText(requireContext(), "Dane zostały wyeksportowane do pliku exportedData.csv", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Dane zostały wyeksportowane do pliku " + exportFilename.text.toString() + ".csv", Toast.LENGTH_LONG).show()
         } ?:
             Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
     }
@@ -165,6 +206,7 @@ class HomeFragment : Fragment() {
             val card = CreditCard.fromCsv(encryptedData, cipher)
 
             dataManager.saveCard(card)
+            showCard()
             Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku exportedData.csv", Toast.LENGTH_LONG).show()
         } catch (e: FileNotFoundException) {
             Toast.makeText(context, "Brak pliku exportedData.csv", Toast.LENGTH_SHORT).show()

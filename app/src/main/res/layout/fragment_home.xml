@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:hint="Numer karty"
         android:inputType="text"
+        android:text="1111222233334444"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,6 +26,7 @@
         android:layout_below="@id/cardNumber"
         android:hint="Data wygaśnięcia"
         android:inputType="text"
+        android:text="11/22"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
@@ -36,6 +38,7 @@
         android:layout_below="@id/cardExpiryDate"
         android:hint="CVV"
         android:inputType="text"
+        android:text="123"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardExpiryDate" />
@@ -44,7 +47,7 @@
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:text="Dodaj"
         app:layout_constraintStart_toStartOf="@+id/cardCvv"
         app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
@@ -53,52 +56,49 @@
         android:id="@+id/readButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="Odczytaj"
-        app:layout_constraintStart_toEndOf="@+id/addButton"
-        app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
+        android:text="Odkryj dane"
+        app:layout_constraintStart_toStartOf="@+id/cardInfo"
+        app:layout_constraintTop_toBottomOf="@+id/cardInfo" />
 
     <TextView
         android:id="@+id/cardInfo"
-        android:layout_width="match_parent"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text=" "
+        android:layout_marginTop="16dp"
+        android:text="Brak dodanej karty"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filenameInput" />
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
 
     <Button
         android:id="@+id/editButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:text="Edytuj"
         app:layout_constraintStart_toEndOf="@+id/readButton"
-        app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
+        app:layout_constraintTop_toBottomOf="@+id/cardInfo" />
 
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:text="Usuń"
         app:layout_constraintStart_toEndOf="@+id/editButton"
-        app:layout_constraintTop_toBottomOf="@+id/cardCvv" />
+        app:layout_constraintTop_toBottomOf="@+id/cardInfo" />
 
     <EditText
-        android:id="@+id/filenameInput"
+        android:id="@+id/exportFilename"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:hint="Nazwa pliku"
         android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/exportButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteButton" />
+        app:layout_constraintTop_toBottomOf="@+id/readButton" />
 
     <Button
         android:id="@+id/exportButton"
@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:text="Exportuj"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/filenameInput" />
+        app:layout_constraintTop_toTopOf="@+id/exportFilename" />
 
     <Button
         android:id="@+id/importButton"
