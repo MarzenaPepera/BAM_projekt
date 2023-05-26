@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
     lateinit var exportFilename: EditText
     lateinit var cardInfo: TextView
     lateinit var addButton: Button
-    lateinit var readButton: Button
+    lateinit var revealButton: Button
     lateinit var editButton: Button
     lateinit var deleteButton: Button
     lateinit var exportButton: Button
@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
         exportFilename = view.findViewById<EditText>(R.id.exportFilename)
         cardInfo = view.findViewById<TextView>(R.id.cardInfo)
         addButton = view.findViewById<Button>(R.id.addButton)
-        readButton = view.findViewById<Button>(R.id.readButton)
+        revealButton = view.findViewById<Button>(R.id.revealButton)
         editButton = view.findViewById<Button>(R.id.editButton)
         deleteButton = view.findViewById<Button>(R.id.deleteButton)
         exportButton = view.findViewById<Button>(R.id.exportButton)
@@ -68,7 +68,12 @@ class HomeFragment : Fragment() {
 
 
         addButton.setOnClickListener {addCard() }
-        readButton.setOnClickListener { showCard() }
+        revealButton.setOnClickListener {
+            if(revealButton.text == "Odkryj dane")
+                revealCard()
+            else if(revealButton.text == "Ukryj dane")
+                showCard()
+        }
         editButton.setOnClickListener { editCard() }
         deleteButton.setOnClickListener { deleteCard() }
         exportButton.setOnClickListener { exportCard() }
@@ -143,19 +148,20 @@ class HomeFragment : Fragment() {
         val card = dataManager.getCard()
         if(card == null)
             Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
-        else
+        else {
             cardInfo.text = "Dane karty:\n" + card?.toString()
-//        cardNumber.setText(card?.number)
-//        cardExpiryDate.setText(card?.expiryDate)
-//        cardCvv.setText(card?.cvv)
+            revealButton.text = "Odkryj dane"
+        }
     }
 
     fun revealCard() {
         val card = dataManager.getCard()
         if (card == null)
             Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
-        else
+        else {
             cardInfo.text = "Dane karty:\n" + card?.reveal()
+            revealButton.text = "Ukryj dane"
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
