@@ -66,7 +66,9 @@ class HomeFragment : Fragment() {
         exportButton = view.findViewById<Button>(R.id.exportButton)
         importButton = view.findViewById<Button>(R.id.importButton)
 
-
+        if(dataManager.getCard() != null) {
+            showCard()
+        }
         addButton.setOnClickListener {addCard() }
         revealButton.setOnClickListener {
             if(revealButton.text == "Odkryj dane")
@@ -138,6 +140,7 @@ class HomeFragment : Fragment() {
                 saveCard(number, expiryDate, cvv)
                 showCard()
                 Toast.makeText(context, "Dodanie karty powiodło się.", Toast.LENGTH_SHORT).show()
+                clearingFields()
             } else
                 Toast.makeText(context, "Niepoprawne dane karty", Toast.LENGTH_SHORT).show()
         } else
@@ -172,12 +175,16 @@ class HomeFragment : Fragment() {
 
     fun deleteCard() {
         dataManager.deleteCard()
-        cardNumber.setText(null)
-        cardExpiryDate.setText(null)
-        cardCvv.setText(null)
+        clearingFields()
         cardInfo.text = ""
         if(dataManager.equals(null))
             Toast.makeText(requireContext(), "Karta usunięta", Toast.LENGTH_LONG).show()
+    }
+
+    fun clearingFields() {
+        cardNumber.text.clear()
+        cardExpiryDate.text.clear()
+        cardCvv.text.clear()
     }
 
     private fun exportCard() {

@@ -56,6 +56,7 @@
         android:id="@+id/revealButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Odkryj dane"
         app:layout_constraintStart_toStartOf="@+id/cardInfo"
         app:layout_constraintTop_toBottomOf="@+id/cardInfo" />
@@ -66,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Brak dodanej karty"
+        app:layout_constraintBottom_toTopOf="@+id/revealButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Edytuj"
         app:layout_constraintStart_toEndOf="@+id/revealButton"
         app:layout_constraintTop_toBottomOf="@+id/cardInfo" />
@@ -85,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Usuń"
         app:layout_constraintStart_toEndOf="@+id/editButton"
         app:layout_constraintTop_toBottomOf="@+id/cardInfo" />
