@@ -35,6 +35,7 @@ class HomeFragment : Fragment() {
     lateinit var cardCvv: EditText
     lateinit var exportFilename: EditText
     lateinit var cardInfo: TextView
+    lateinit var headline: TextView
     lateinit var addButton: Button
     lateinit var revealButton: Button
     lateinit var editButton: Button
@@ -59,6 +60,7 @@ class HomeFragment : Fragment() {
         cardCvv = view.findViewById<EditText>(R.id.cardCvv)
         exportFilename = view.findViewById<EditText>(R.id.exportFilename)
         cardInfo = view.findViewById<TextView>(R.id.cardInfo)
+        headline = view.findViewById<TextView>(R.id.headline)
         addButton = view.findViewById<Button>(R.id.addButton)
         revealButton = view.findViewById<Button>(R.id.revealButton)
         editButton = view.findViewById<Button>(R.id.editButton)
@@ -68,7 +70,10 @@ class HomeFragment : Fragment() {
 
         if(dataManager.getCard() != null) {
             showCard()
+        }else {
+            invisibleButtons()
         }
+
         addButton.setOnClickListener {addCard() }
         revealButton.setOnClickListener {
             if(revealButton.text == "Odkryj dane")
@@ -139,12 +144,19 @@ class HomeFragment : Fragment() {
             if (validateCardNumber(number) && validateExpiryDate(expiryDate) && validateCVV(cvv)) {
                 saveCard(number, expiryDate, cvv)
                 showCard()
-                Toast.makeText(context, "Dodanie karty powiodło się.", Toast.LENGTH_SHORT).show()
+                if(addButton.text == "Zapisz") {
+                    Toast.makeText(context, "Edytowano kartę", Toast.LENGTH_SHORT).show()
+                    addButton.text = "Dodaj kartę"
+                    headline.text = "Dodawanie karty:"
+                }else {
+                    visibleButtons()
+                    Toast.makeText(context, "Dodano kartę", Toast.LENGTH_SHORT).show()
+                }
                 clearingFields()
             } else
                 Toast.makeText(context, "Niepoprawne dane karty", Toast.LENGTH_SHORT).show()
         } else
-            Toast.makeText(context, "Proszę uzupełnić wszystkie pola", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Uzupełnij wszystkie pola", Toast.LENGTH_SHORT).show()
     }
 
     fun showCard() {
@@ -167,24 +179,46 @@ class HomeFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun editCard() {
-        addCard()
-        showCard()
+        val card = dataManager.getCard()
+        cardNumber.setText(card?.number)
+        cardExpiryDate.setText(card?.expiryDate)
+        cardCvv.setText(card?.cvv)
+        addButton.text = "Zapisz"
+        headline.text = "Edycja karty:"
     }
 
     fun deleteCard() {
         dataManager.deleteCard()
         clearingFields()
         cardInfo.text = ""
-        if(dataManager.equals(null))
-            Toast.makeText(requireContext(), "Karta usunięta", Toast.LENGTH_LONG).show()
+        if(dataManager.getCard() == null)
+            Toast.makeText(requireContext(), "Usunięto kartę", Toast.LENGTH_LONG).show()
+        invisibleButtons()
+        addButton.text = "Dodaj kartę"
+        headline.text = "Dodawanie karty:"
     }
 
     fun clearingFields() {
         cardNumber.text.clear()
         cardExpiryDate.text.clear()
         cardCvv.text.clear()
+    }
+
+    fun visibleButtons() {
+        revealButton.visibility = View.VISIBLE
+        editButton.visibility = View.VISIBLE
+        deleteButton.visibility = View.VISIBLE
+        exportButton.visibility = View.VISIBLE
+        exportFilename.visibility = View.VISIBLE
+    }
+
+    fun invisibleButtons() {
+        revealButton.visibility = View.INVISIBLE
+        editButton.visibility = View.INVISIBLE
+        deleteButton.visibility = View.INVISIBLE
+        exportButton.visibility = View.INVISIBLE
+        exportFilename.visibility = View.INVISIBLE
     }
 
     private fun exportCard() {

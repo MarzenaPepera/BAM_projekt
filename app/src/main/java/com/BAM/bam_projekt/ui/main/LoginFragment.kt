@@ -80,7 +80,7 @@ class LoginFragment : Fragment() {
                 }
             }
         } else {
-            Toast.makeText(context, "Proszę uzupełnić wszystkie pola",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Uzupełnij wszystkie pola",Toast.LENGTH_SHORT).show()
         }
     }
 
