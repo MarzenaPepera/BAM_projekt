@@ -16,10 +16,14 @@ import androidx.security.crypto.MasterKey
 import com.BAM.bam_projekt.R
 import java.io.File
 import java.io.FileNotFoundException
+import java.security.InvalidKeyException
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.math.log
 
 class HomeFragment : Fragment() {
 
@@ -34,8 +38,12 @@ class HomeFragment : Fragment() {
     lateinit var cardExpiryDate: EditText
     lateinit var cardCvv: EditText
     lateinit var exportFilename: EditText
+    lateinit var importFilename: EditText
+    lateinit var exportPassword: EditText
+    lateinit var importPassword: EditText
     lateinit var cardInfo: TextView
     lateinit var headline: TextView
+    lateinit var exportHeadline: TextView
     lateinit var addButton: Button
     lateinit var revealButton: Button
     lateinit var editButton: Button
@@ -51,6 +59,7 @@ class HomeFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDataManager()
@@ -59,8 +68,12 @@ class HomeFragment : Fragment() {
         cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
         cardCvv = view.findViewById<EditText>(R.id.cardCvv)
         exportFilename = view.findViewById<EditText>(R.id.exportFilename)
+        importFilename = view.findViewById<EditText>(R.id.importFilename)
+        exportPassword = view.findViewById<EditText>(R.id.exportPassword)
+        importPassword = view.findViewById<EditText>(R.id.importPassword)
         cardInfo = view.findViewById<TextView>(R.id.cardInfo)
         headline = view.findViewById<TextView>(R.id.headline)
+        exportHeadline = view.findViewById<TextView>(R.id.exportHeadline)
         addButton = view.findViewById<Button>(R.id.addButton)
         revealButton = view.findViewById<Button>(R.id.revealButton)
         editButton = view.findViewById<Button>(R.id.editButton)
@@ -166,6 +179,7 @@ class HomeFragment : Fragment() {
         else {
             cardInfo.text = "Dane karty:\n" + card?.toString()
             revealButton.text = "Odkryj dane"
+            visibleButtons()
         }
     }
 
@@ -210,7 +224,9 @@ class HomeFragment : Fragment() {
         editButton.visibility = View.VISIBLE
         deleteButton.visibility = View.VISIBLE
         exportButton.visibility = View.VISIBLE
+        exportPassword.visibility = View.VISIBLE
         exportFilename.visibility = View.VISIBLE
+        exportHeadline.visibility = View.VISIBLE
     }
 
     fun invisibleButtons() {
@@ -218,32 +234,32 @@ class HomeFragment : Fragment() {
         editButton.visibility = View.INVISIBLE
         deleteButton.visibility = View.INVISIBLE
         exportButton.visibility = View.INVISIBLE
+        exportPassword.visibility = View.INVISIBLE
         exportFilename.visibility = View.INVISIBLE
+        exportHeadline.visibility = View.INVISIBLE
     }
 
     private fun exportCard() {
         val card = dataManager.getCard()
 
         card?.let {
-            val secretKey = "mySuperSecretKey" // This should be a securely generated key
-            val keySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+            val password = exportPassword.text.toString()
+            val keySpec = getSecretKey(password)
             val cipher = Cipher.getInstance("AES")
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-
+                cipher.init(Cipher.ENCRYPT_MODE, keySpec)
             val encryptedData = cipher.doFinal(it.toCsv().toByteArray())
-//            val encryptedData = it.toCsv().toByteArray()
             if(exportFilename.text.toString().isEmpty())
                 exportFilename.setText("exportedData")
             val filePath = requireContext().filesDir.absolutePath + "/" + exportFilename.text.toString() + ".csv"
             File(filePath).writeBytes(encryptedData)
             Toast.makeText(requireContext(), "Dane zostały wyeksportowane do pliku " + exportFilename.text.toString() + ".csv", Toast.LENGTH_LONG).show()
         } ?:
-            Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
     }
 
     private fun importCard() {
-        val secretKey = "mySuperSecretKey" // This should be a securely generated key
-        val keySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+        val password = importPassword.text.toString()
+        val keySpec = getSecretKey(password)
         val cipher = Cipher.getInstance("AES")
         cipher.init(Cipher.DECRYPT_MODE, keySpec)
 
@@ -254,12 +270,22 @@ class HomeFragment : Fragment() {
 
             dataManager.saveCard(card)
             showCard()
+            importPassword.text.clear()
+            importFilename.text.clear()
             Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku exportedData.csv", Toast.LENGTH_LONG).show()
         } catch (e: FileNotFoundException) {
             Toast.makeText(context, "Brak pliku exportedData.csv", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(context, "Wystąpił błąd podczas importu", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun getSecretKey(password: String): SecretKeySpec {
+        val salt = "your-salt".toByteArray() // TODO: Use a proper salt, preferably unique per user
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+        val spec = PBEKeySpec(password.toCharArray(), salt, 65536, 256)
+        val secretKey = factory.generateSecret(spec)
+        return SecretKeySpec(secretKey.encoded, "AES")
     }
 
 }
