@@ -264,19 +264,22 @@ class HomeFragment : Fragment() {
         cipher.init(Cipher.DECRYPT_MODE, keySpec)
 
         try{
-            val filePath = requireContext().filesDir.absolutePath + "/exportedData.csv"
+            if(importFilename.text.toString().isEmpty())
+                importFilename.setText("exportedData")
+            val filePath = requireContext().filesDir.absolutePath + "/" + importFilename.text.toString() + ".csv"
             val encryptedData = File(filePath).readBytes()
             val card = CreditCard.fromCsv(encryptedData, cipher)
-
             dataManager.saveCard(card)
             showCard()
             importPassword.text.clear()
             importFilename.text.clear()
-            Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku exportedData.csv", Toast.LENGTH_LONG).show()
+            exportPassword.text.clear()
+            exportFilename.text.clear()
+            Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku " + importFilename.text.toString() + ".csv", Toast.LENGTH_LONG).show()
         } catch (e: FileNotFoundException) {
-            Toast.makeText(context, "Brak pliku exportedData.csv", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Brak pliku " + importFilename.text.toString() + ".csv", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(context, "Wystąpił błąd podczas importu", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Niepoprawne hasło", Toast.LENGTH_SHORT).show()
         }
     }
 
