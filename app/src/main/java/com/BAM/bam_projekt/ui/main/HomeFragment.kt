@@ -296,7 +296,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getSecretKey(password: String): SecretKeySpec {
-        val salt = "your-salt".toByteArray() // TODO: Use a proper salt, preferably unique per user
+        val userHash = dataManager.getUserCredentials().hashCode()
+        val salt = userHash.toString().toByteArray()
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val spec = PBEKeySpec(password.toCharArray(), salt, 65536, 256)
         val secretKey = factory.generateSecret(spec)
@@ -304,12 +305,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun logout() {
-        val sharedPref = activity?.getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-        with (sharedPref?.edit()) {
-            this?.remove("username")
-            this?.remove("password")
-            this?.apply()
-        }
+        dataManager.saveUserCredentials("", "")
         findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
     }
 

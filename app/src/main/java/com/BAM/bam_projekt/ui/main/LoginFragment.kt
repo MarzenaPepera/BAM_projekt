@@ -101,7 +101,7 @@ class LoginFragment : Fragment() {
 
     private fun checkIfUserLoggedIn() {
         val user = dataManager.getUserCredentials()
-        if (user.first != null && user.second != null) {
+        if (user.first != null && user.second != null && user.first != "" && user.second != "") {
             login(user.first!!, user.second!!)
         }
     }
