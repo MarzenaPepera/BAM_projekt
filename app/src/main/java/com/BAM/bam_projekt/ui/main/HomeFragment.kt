@@ -310,7 +310,7 @@ class HomeFragment : Fragment() {
             this?.remove("password")
             this?.apply()
         }
-        findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
+        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
     }
 
 }

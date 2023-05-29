@@ -45,10 +45,14 @@ class RegisterFragment : Fragment() {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
 
-            Log.d("RegisterFragment", "Email: $email, Password: $password")
+            //Log.d("RegisterFragment", "Email: $email, Password: $password")
 
             //viewModel.registerUser(username, password)
-            registerNewUser(email, password)
+            try {
+                registerNewUser(email, password)
+            } catch (e: Exception) {
+                Toast.makeText(context, "Uzupełnij wszystkie pola", Toast.LENGTH_SHORT).show()
+            }
         }
 
         button_to_login.setOnClickListener {
@@ -59,15 +63,12 @@ class RegisterFragment : Fragment() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Rejestracja udana, aktualizuj interfejs użytkownika z danymi użytkownika
-                    Log.d(TAG, "createUserWithEmail:success")
+                    //Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
                     navToLogin()
                 } else {
-                    // Jeśli rejestracja nie powiedzie się, wyświetl komunikat dla użytkownika.
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(context, "Rejestracja nie powiodła się.",
-                        Toast.LENGTH_SHORT).show()
+                    //Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(context, "Rejestracja nie powiodła się.", Toast.LENGTH_SHORT).show()
                 }
             }
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -22,8 +23,9 @@ class LoginFragment : Fragment() {
 
     lateinit var loginButton: Button
     lateinit var button_to_register: Button
-    lateinit var editTextEmail: EditText
-    lateinit var editTextPassword: EditText
+    lateinit var email: EditText
+    lateinit var password: EditText
+    lateinit var rememberMe: CheckBox
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,18 +36,20 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        rememberMe = view.findViewById<CheckBox>(R.id.rememberMeCheckbox)
+
         auth = Firebase.auth
         initDataManager()
         checkIfUserLoggedIn()
 
         loginButton = view.findViewById<Button>(R.id.button_login)
-        editTextEmail = view.findViewById<EditText>(R.id.editTextEmail)
-        editTextPassword = view.findViewById<EditText>(R.id.editTextPassword)
+        email = view.findViewById<EditText>(R.id.editTextEmail)
+        password = view.findViewById<EditText>(R.id.editTextPassword)
         button_to_register = view.findViewById<Button>(R.id.button_to_register)
 
         loginButton.setOnClickListener {
-            val email = editTextEmail.text.toString()
-            val password = editTextPassword.text.toString()
+            val email = email.text.toString()
+            val password = password.text.toString()
             login(email, password)
         }
 
@@ -73,7 +77,8 @@ class LoginFragment : Fragment() {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    dataManager.saveUserCredentials(email, password)
+                    if(rememberMe.isChecked)
+                        dataManager.saveUserCredentials(email, password)
                     navToHome()
                 } else {
                     Toast.makeText(context, "Brak autentykacji",Toast.LENGTH_SHORT).show()
