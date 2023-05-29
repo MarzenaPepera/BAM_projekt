@@ -1,5 +1,6 @@
 package com.BAM.bam_projekt.ui.main
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.math.log
+import androidx.navigation.fragment.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -50,6 +52,7 @@ class HomeFragment : Fragment() {
     lateinit var deleteButton: Button
     lateinit var exportButton: Button
     lateinit var importButton: Button
+    lateinit var logoutButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +83,7 @@ class HomeFragment : Fragment() {
         deleteButton = view.findViewById<Button>(R.id.deleteButton)
         exportButton = view.findViewById<Button>(R.id.exportButton)
         importButton = view.findViewById<Button>(R.id.importButton)
+        logoutButton = view.findViewById<Button>(R.id.logoutButton)
 
         if(dataManager.getCard() != null) {
             showCard()
@@ -98,6 +102,7 @@ class HomeFragment : Fragment() {
         deleteButton.setOnClickListener { deleteCard() }
         exportButton.setOnClickListener { exportCard() }
         importButton.setOnClickListener { importCard() }
+        logoutButton.setOnClickListener { logout() }
 
     }
 
@@ -296,6 +301,16 @@ class HomeFragment : Fragment() {
         val spec = PBEKeySpec(password.toCharArray(), salt, 65536, 256)
         val secretKey = factory.generateSecret(spec)
         return SecretKeySpec(secretKey.encoded, "AES")
+    }
+
+    private fun logout() {
+        val sharedPref = activity?.getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+        with (sharedPref?.edit()) {
+            this?.remove("username")
+            this?.remove("password")
+            this?.apply()
+        }
+        findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
     }
 
 }

@@ -190,4 +190,14 @@
         app:layout_constraintEnd_toEndOf="@+id/exportButton"
         app:layout_constraintTop_toBottomOf="@+id/importFilename" />
 
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Wyloguj"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/importButton"
+        app:layout_constraintTop_toBottomOf="@+id/importButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
