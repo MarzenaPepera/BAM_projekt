@@ -240,31 +240,38 @@ class HomeFragment : Fragment() {
     }
 
     private fun exportCard() {
-        val card = dataManager.getCard()
-
-        card?.let {
-            val password = exportPassword.text.toString()
-            val keySpec = getSecretKey(password)
-            val cipher = Cipher.getInstance("AES")
+        try {
+            val card = dataManager.getCard()
+            card?.let {
+                val password = exportPassword.text.toString()
+                val keySpec = getSecretKey(password)
+                val cipher = Cipher.getInstance("AES")
                 cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-            val encryptedData = cipher.doFinal(it.toCsv().toByteArray())
-            if(exportFilename.text.toString().isEmpty())
-                exportFilename.setText("exportedData")
-            val filePath = requireContext().filesDir.absolutePath + "/" + exportFilename.text.toString() + ".csv"
-            File(filePath).writeBytes(encryptedData)
-            Toast.makeText(requireContext(), "Dane zostały wyeksportowane do pliku " + exportFilename.text.toString() + ".csv", Toast.LENGTH_LONG).show()
-        } ?:
-        Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
+                val encryptedData = cipher.doFinal(it.toCsv().toByteArray())
+                if (exportFilename.text.toString().isEmpty())
+                    exportFilename.setText("exportedData")
+                val filePath =
+                    requireContext().filesDir.absolutePath + "/" + exportFilename.text.toString() + ".csv"
+                File(filePath).writeBytes(encryptedData)
+                Toast.makeText(
+                    requireContext(),
+                    "Dane zostały wyeksportowane do pliku " + exportFilename.text.toString() + ".csv",
+                    Toast.LENGTH_LONG
+                ).show()
+            } ?: Toast.makeText(requireContext(), "Brak zapisanych kart", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Nadaj hasło", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun importCard() {
-        val password = importPassword.text.toString()
-        val keySpec = getSecretKey(password)
-        val cipher = Cipher.getInstance("AES")
-        cipher.init(Cipher.DECRYPT_MODE, keySpec)
+        try {
+            val password = importPassword.text.toString()
+            val keySpec = getSecretKey(password)
+            val cipher = Cipher.getInstance("AES")
+            cipher.init(Cipher.DECRYPT_MODE, keySpec)
 
-        try{
-            if(importFilename.text.toString().isEmpty())
+            if (importFilename.text.toString().isEmpty())
                 importFilename.setText("exportedData")
             val filePath = requireContext().filesDir.absolutePath + "/" + importFilename.text.toString() + ".csv"
             val encryptedData = File(filePath).readBytes()
