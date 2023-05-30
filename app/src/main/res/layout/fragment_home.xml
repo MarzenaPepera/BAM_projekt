@@ -25,7 +25,6 @@
         android:layout_marginTop="8dp"
         android:hint="Numer karty"
         android:inputType="text"
-        android:text="1111222233334444"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/headline"
         app:layout_constraintTop_toBottomOf="@+id/headline" />
@@ -35,9 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/cardNumber"
-        android:hint="Data wygaśnięcia"
+        android:hint="Data wygaśnięcia (mm/yy)"
         android:inputType="text"
-        android:text="11/22"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
@@ -49,7 +47,6 @@
         android:layout_below="@id/cardExpiryDate"
         android:hint="CVV"
         android:inputType="text"
-        android:text="123"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardExpiryDate" />

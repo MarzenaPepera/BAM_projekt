@@ -35,7 +35,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var dataManager: DataManager
-
     lateinit var cardNumber: EditText
     lateinit var cardExpiryDate: EditText
     lateinit var cardCvv: EditText
@@ -61,12 +60,10 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDataManager()
-
         cardNumber = view.findViewById<EditText>(R.id.cardNumber)
         cardExpiryDate = view.findViewById<EditText>(R.id.cardExpiryDate)
         cardCvv = view.findViewById<EditText>(R.id.cardCvv)
@@ -90,7 +87,6 @@ class HomeFragment : Fragment() {
         }else {
             invisibleButtons()
         }
-
         addButton.setOnClickListener {addCard() }
         revealButton.setOnClickListener {
             if(revealButton.text == "Odkryj dane")
@@ -103,7 +99,6 @@ class HomeFragment : Fragment() {
         exportButton.setOnClickListener { exportCard() }
         importButton.setOnClickListener { importCard() }
         logoutButton.setOnClickListener { logout() }
-
     }
 
     private fun initDataManager() {
@@ -111,7 +106,6 @@ class HomeFragment : Fragment() {
         val masterKey = MasterKey.Builder(requireContext())
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
-
         val sharedPreferences = EncryptedSharedPreferences.create(
             requireContext(),
             "encrypted_preferences",
@@ -119,9 +113,7 @@ class HomeFragment : Fragment() {
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
-
         dataManager = DataManager(sharedPreferences)
-
     }
 
     fun validateCardNumber(cardNumber: String): Boolean {
@@ -283,11 +275,11 @@ class HomeFragment : Fragment() {
             val card = CreditCard.fromCsv(encryptedData, cipher)
             dataManager.saveCard(card)
             showCard()
+            Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku " + importFilename.text.toString() + ".csv", Toast.LENGTH_LONG).show()
             importPassword.text.clear()
             importFilename.text.clear()
             exportPassword.text.clear()
             exportFilename.text.clear()
-            Toast.makeText(requireContext(), "Dane zostały zaimportowane z pliku " + importFilename.text.toString() + ".csv", Toast.LENGTH_LONG).show()
         } catch (e: FileNotFoundException) {
             Toast.makeText(context, "Brak pliku " + importFilename.text.toString() + ".csv", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
@@ -308,5 +300,4 @@ class HomeFragment : Fragment() {
         dataManager.saveUserCredentials("", "")
         findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
     }
-
 }

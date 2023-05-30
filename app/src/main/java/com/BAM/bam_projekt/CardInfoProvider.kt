@@ -10,7 +10,6 @@ import android.net.Uri
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-
 class CardInfoProvider : ContentProvider() {
 
     private val URI_MATCHER = with(UriMatcher(UriMatcher.NO_MATCH)) {
@@ -21,7 +20,6 @@ class CardInfoProvider : ContentProvider() {
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(): Boolean {
-        // Initialize your EncryptedSharedPreferences here
         val masterKey = MasterKey.Builder(context!!)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
@@ -71,5 +69,4 @@ class CardInfoProvider : ContentProvider() {
     override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
         TODO("Not yet implemented")
     }
-
 }

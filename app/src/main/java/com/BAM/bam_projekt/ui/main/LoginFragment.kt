@@ -20,7 +20,6 @@ import com.google.firebase.ktx.Firebase
 class LoginFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var dataManager: DataManager
-
     lateinit var loginButton: Button
     lateinit var button_to_register: Button
     lateinit var email: EditText
@@ -46,13 +45,11 @@ class LoginFragment : Fragment() {
         email = view.findViewById<EditText>(R.id.editTextEmail)
         password = view.findViewById<EditText>(R.id.editTextPassword)
         button_to_register = view.findViewById<Button>(R.id.button_to_register)
-
         loginButton.setOnClickListener {
             val email = email.text.toString()
             val password = password.text.toString()
             login(email, password)
         }
-
         button_to_register.setOnClickListener {
             navToRegister()
         }
@@ -62,7 +59,6 @@ class LoginFragment : Fragment() {
         val masterKey = MasterKey.Builder(requireContext())
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
-
         val sharedPreferences = EncryptedSharedPreferences.create(
             requireContext(),
             "encrypted_preferences",

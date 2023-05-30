@@ -21,7 +21,6 @@ class DataManager(private val sharedPreferences: SharedPreferences) {
         if (number != null && expiryDate != null && cvv != null) {
             return CreditCard(number, expiryDate, cvv)
         }
-
         return null
     }
 
